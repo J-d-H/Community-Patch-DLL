@@ -1,27 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Context ColorSet="Beige_Black_Alpha" Font="TwCenMT16" FontStyle="Shadow">
-	<Instance Name="CorporationInstance">
-		<Box ID="CorporationBox" Offset="0,0" Anchor="L,T" Size="955,80" Color="255,255,255,0">
+	<Instance Name="AvailableCorporationInstance">
+		<Box ID="AvailableCorporationBox" Offset="0,0" Anchor="L,T" Size="955,80" Color="255,255,255,0">
 			<Stack ID="RowStack" Anchor="L,T" StackGrowth="Right" Padding="13">
 				<Box ID="NameBox" Offset="0,0" Anchor="R,C" Size="320,48" Color="White.0">
 					<Image Anchor="L,C" Offset="0,0" Texture="CorpAtlas80.dds" Size="80.80" ID="CorporationPortrait"/>
 					<Label Anchor="L,C" Offset="80,0" String="CorpName" Font="TwCenMT22" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationName"/>
 				</Box>
-				<Box ID="ResourceBox" Offset="0,0" Anchor="R,C" Size="240,48" Color="White.0">
+				<Box ID="ResourceBox" Offset="0,0" Anchor="R,C" Size="220,48" Color="White.0">
 					<Label Anchor="C,T" Offset="0,4" String="{TXT_KEY_CPO_MONOPOLY_REQUIRED}" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow"/>
 					<Label Anchor="C,B" Offset="0,4" String="[ICON_RES_WINE]" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="ResourcesRequired"/>
+				</Box>
+				<Box ID="ProgressBox" Anchor="R,C" Color="255.255.255.0" Size="254,70">
+					<Label Anchor="C,T" Offset="0,0" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="ProgressTurns"/>
+					<Image Anchor="C,C" Size="214,29" Offset="-20,4" Texture="MeterBarGreatPersonBack.dds">
+						<TextureBar Anchor="L,C" Size="214.29" Texture="MeterBarGreatPersonGold.dds" Direction="Right" ID="ProgressMeter" Hidden="0"/>
+						<Image Anchor="L,C" Size="214,29" Offset="0,0" Texture="MeterBarFrame.dds"/>
+					</Image>
+					<Image Anchor="R,C" Size="64,64" Offset="0,-2" Texture="64x64FrameButtons.dds">
+						<Button NoStateChange="1" Anchor="C,C" TextureOffset="64,128" Texture="CorpAtlas64.dds" Size="64,64" ID="ProgressImage"/>
+					</Image>
+				</Box>
+			</Stack>
+		</Box>
+	</Instance>
+	<Instance Name="EstablishedCorporationInstance">
+		<Box ID="EstablishedCorporationBox" Offset="0,0" Anchor="L,T" Size="955,80" Color="255,255,255,0">
+			<Stack ID="RowStack" Anchor="L,T" StackGrowth="Right" Padding="13">
+				<Box ID="NameBox" Offset="0,0" Anchor="R,C" Size="320,48" Color="White.0">
+					<Image Anchor="L,C" Offset="0,0" Texture="CorpAtlas80.dds" Size="80.80" ID="CorporationPortrait"/>
+					<Label Anchor="L,C" Offset="80,0" String="CorpName" Font="TwCenMT22" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationName"/>
 				</Box>
 				<Box ID="FounderBox" Offset="0,0" Anchor="R,C" Size="64,48" Color="White.0">
 					<Image ID="FounderIconBG" Size="32.32" Anchor="C,B" Offset="0,-8" TextureOffset="32,0" Texture="CivIconBGSizes.dds" />
 					<Image ID="FounderIconShadow" Size="24.24" Anchor="C,B" Offset="1,-7" Texture="CivSymbolAtlas16.dds" Color="Black.128"/>
 					<Image ID="FounderIcon" Size="24.24" Offset="0,-8"  Anchor="C,B" Texture="CivSymbolsColor256.dds" />
-					<Label Anchor="C,B" Offset="0,4" String="{TXT_KEY_CPO_FOUNDER_NONE}" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="NoFounderLabel"/>
 					<Label Anchor="C,T" Offset="0,4" String="{TXT_KEY_CPO_FOUNDER}" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow"/>
+				</Box>
+				<Box ID="CityBox" Offset="0,0" Anchor="R,C" Size="92,48" Color="White.0">
+					<Label Anchor="C,T" Offset="0,4" String="{TXT_KEY_CPO_HEADQUARTERS}" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow"/>
+					<Label Anchor="C,B" Offset="0,4" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="FounderCity"/>
+				</Box>
+				<Box ID="OfficesBox" Offset="0,0" Anchor="R,C" Size="160,48" Color="White.0">
+					<Label Anchor="C,T" Offset="0,4" String="{TXT_KEY_CPO_OFFICES}" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow"/>
+					<Label Anchor="C,B" Offset="0,4" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="OfficesLabel"/>
+				</Box>
+				<Box ID="FranchisesBox" Offset="0,0" Anchor="R,C" Size="160,48" Color="White.0">
+					<Label Anchor="C,T" Offset="0,4" String="{TXT_KEY_CPO_FRANCHISES}" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow"/>
+					<Label Anchor="C,B" Offset="0,4" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="FranchisesLabel"/>
 				</Box>
 			</Stack>
 		</Box>
 	</Instance>
 	<Box Style="BGBlock_ClearTopBar"/>
+	<Image ID="BackgroundImage" Texture="loading_20.dds" Size="926,459" Color="255,255,255,80" Offset="18,77"/>
 	<Grid Size="990,653" Anchor="C,C" Offset="0,6" Padding="0,0" Style="Grid9DetailFive140">
 		<!-- Decoration -->
 		<!-- Top -->

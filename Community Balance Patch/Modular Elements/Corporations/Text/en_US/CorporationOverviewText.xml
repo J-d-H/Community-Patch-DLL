@@ -26,5 +26,23 @@
 		<Row Tag="TXT_KEY_CPO_FOUNDER_NONE">
 			<Text>None</Text>
 		</Row>
+		<Row Tag="TXT_KEY_CPO_PROGRESS">
+			<Text>Progress</Text>
+		</Row>
+		<Row Tag="TXT_KEY_CPO_HEADQUARTERS">
+			<Text>Headquarters</Text>
+		</Row>
+		<Row Tag="TXT_KEY_CPO_OFFICE_BENEFIT">
+			<Text>Office Benefit</Text>
+		</Row>
+		<Row Tag="TXT_KEY_CPO_FRANCHISE_BENEFIT">
+			<Text>Franchise Benefit</Text>
+		</Row>
+		<Row Tag="TXT_KEY_CPO_OFFICES">
+			<TexT>Offices Established</TexT>
+		</Row>
+		<Row Tag="TXT_KEY_CPO_FRANCHISES">
+			<TexT>Franchises Established</TexT>
+		</Row>
 	</Language_en_US>
 </GameData>

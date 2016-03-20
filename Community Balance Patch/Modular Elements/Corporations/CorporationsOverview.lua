@@ -3,9 +3,10 @@
 -------------------------------------------------
 include( "IconSupport" );
 include( "InstanceManager" );
+include("InfoTooltipInclude");
 
-local g_AvailableCorporationsIM = InstanceManager:new( "CorporationInstance", "CorporationBox", Controls.AvailableCorporationsStack );
-local g_EstablishedCorporationsIM = InstanceManager:new( "CorporationInstance", "CorporationBox", Controls.EstablishedCorporationsStack ); 
+local g_AvailableCorporationsIM = InstanceManager:new( "AvailableCorporationInstance", "AvailableCorporationBox", Controls.AvailableCorporationsStack );
+local g_EstablishedCorporationsIM = InstanceManager:new( "EstablishedCorporationInstance", "EstablishedCorporationBox", Controls.EstablishedCorporationsStack ); 
 
 g_Tabs = {
 	["Corporations"] = {
@@ -22,25 +23,39 @@ g_Tabs = {
 -- Corporation HQs
 g_Headquarters = {
 	[0] = {
-		BuildingClass = "BUILDINGCLASS_TRADER_SIDS_HQ"
+		headquartersClass = "BUILDINGCLASS_TRADER_SIDS_HQ",
+		officeClass = "BUILDINGCLASS_TRADER_SIDS",
+		franchiseClass = "BUILDINGCLASS_TRADER_SIDS_FRANCHISE"
 	},
 	[1] = {
-		BuildingClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS_HQ"
+		headquartersClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS_HQ",
+		officeClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS",
+		franchiseClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS_FRANCHISE"
 	},
 	[2] = {
-		BuildingClass = "BUILDINGCLASS_HEXXON_REFINERY_HQ"
+		headquartersClass = "BUILDINGCLASS_HEXXON_REFINERY_HQ",
+		officeClass = "BUILDINGCLASS_HEXXON_REFINERY",
+		franchiseClass = "BUILDINGCLASS_HEXXON_REFINERY_FRANCHISE"
 	},
 	[3] = {
-		BuildingClass = "BUILDINGCLASS_GIORIO_ARMEIER_HQ"
+		headquartersClass = "BUILDINGCLASS_GIORIO_ARMEIER_HQ",
+		officeClass = "BUILDINGCLASS_GIORIO_ARMEIER",
+		franchiseClass = "BUILDINGCLASS_GIORIO_ARMEIER_FRANCHISE"
 	},
 	[4] = {
-		BuildingClass = "BUILDINGCLASS_FIRAXITE_MATERIALS_HQ"
+		headquartersClass = "BUILDINGCLASS_FIRAXITE_MATERIALS_HQ",
+		officeClass = "BUILDINGCLASS_FIRAXITE_MATERIALS",
+		franchiseClass = "BUILDINGCLASS_FIRAXITE_MATERIALS_FRANCHISE"
 	},
 	[5] = {
-		BuildingClass = "BUILDINGCLASS_TWOKAY_FOODS_HQ"
+		headquartersClass = "BUILDINGCLASS_TWOKAY_FOODS_HQ",
+		officeClass = "BUILDINGCLASS_TWOKAY_FOODS",
+		franchiseClass = "BUILDINGCLASS_TWOKAY_FOODS_FRANCHISE"
 	},
 	[6] = {
-		BuildingClass = "BUILDINGCLASS_CIVILIZED_JEWELERS_HQ"
+		headquartersClass = "BUILDINGCLASS_CIVILIZED_JEWELERS_HQ",
+		officeClass = "BUILDINGCLASS_CIVILIZED_JEWELERS",
+		franchiseClass = "BUILDINGCLASS_CIVILIZED_JEWELERS_FRANCHISE"
 	}
 }
 
@@ -55,6 +70,17 @@ g_pTeam = Teams[g_iTeam];
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
+function SetBackground()
+	-- background based on ideology
+	local iIdeology = g_pPlayer:GetLateGamePolicyTree();
+	local strBackgroundImage = "loading_9.dds";
+	Controls.VassalBackgroundImage:SetTextureAndResize(strBackgroundImage);
+
+	-- Can't find a method to fit texture to size, so this a hack way of doing it
+	Controls.BackgroundImage:SetSizeX(926);
+	Controls.BackgroundImage:SetSizeY(459);
+end
+
 function DisplayCorporations()
 	local bHasCorporation = (g_pPlayer:GetCorpID() > 0);
 
@@ -73,8 +99,15 @@ end
 -------------------------------------------------------------------------------
 
 function UpdateAvailableCorporations()
-	local buildingClass;
+	local BuildingClass;
 	local building;
+
+	local OfficeClass;
+	local office;
+
+	local FranchiseClass;
+	local franchise;
+
 	local corpID;
 
 	-- Clear buttons
@@ -82,15 +115,23 @@ function UpdateAvailableCorporations()
 	 g_EstablishedCorporationsIM:ResetInstances();
 
 	for i,v in pairs(g_Headquarters) do
-		buildingClass = GameInfo.BuildingClasses[v.BuildingClass];
-		building = GameInfo.Buildings[buildingClass.DefaultBuilding];
+
+		BuildingClass = GameInfo.BuildingClasses[v.headquartersClass];
+		building = GameInfo.Buildings[BuildingClass.DefaultBuilding];
+
+		OfficeClass = GameInfo.BuildingClasses[v.officeClass];
+		office = GameInfo.Buildings[OfficeClass.DefaultBuilding];
+
+		FranchiseClass = GameInfo.BuildingClasses[v.franchiseClass];
+		franchise = GameInfo.Buildings[FranchiseClass.DefaultBuilding];
 
 		corpID = building.CorporationHQID;
-
 		print( i .. ": " .. corpID );
 
 		local iFounderID = -1;
 		local founderTooltip = "";
+		local pFoundingCity = "";
+		local pFoundingPlayer = nil;
 
 		-- Get the founder 
 		for iPlayerLoop = 0, GameDefines.MAX_MAJOR_CIVS-1, 1 do
@@ -109,13 +150,22 @@ function UpdateAvailableCorporations()
 					else
 						founderTooltip = Locale.ConvertTextKey( "TXT_KEY_UNMET_PLAYER" );
 					end
+
+					-- Look through their cities and get the headquarters
+					for city in pFounder:Cities() do
+						if(city:IsHasBuilding(building.ID)) then
+							pFoundingCity = city;
+							pFoundingPlayer = Players[iFounderID];
+							break;
+						end
+					end
+
 					break;
 				end
 			end
 		end
 
 		local controlTable;
-
 		local bAvailable = (iFounderID == -1);
 
 		-- If this corporation is available
@@ -126,31 +176,73 @@ function UpdateAvailableCorporations()
 		else 
 			controlTable = g_EstablishedCorporationsIM:GetInstance();
 			if(g_pTeam:IsHasMet(Players[iFounderID]:GetTeam())) then
-				CivIconHookup( iFounderID, 32, controlTable.FounderIcon, controlTable.FounderIconBG, controlTable.FounderIconShadow);
+				CivIconHookup( iFounderID, 32, controlTable.FounderIcon, controlTable.FounderIconBG, controlTable.FounderIconShadow, false, true);
 			else
-				CivIconHookup( -1, 32, controlTable.FounderIcon, controlTable.FounderIconBG, controlTable.FounderIconShadow);
+				CivIconHookup( -1, 32, controlTable.FounderIcon, controlTable.FounderIconBG, controlTable.FounderIconShadow, false, true);
 			end
+			controlTable.FounderBox:LocalizeAndSetToolTip(founderTooltip);
 		end
 
-		controlTable.NoFounderLabel:SetHide( not bAvailable );
-		controlTable.FounderIcon:SetHide( bAvailable );
-		controlTable.FounderIconBG:SetHide( bAvailable );
-		controlTable.FounderIconShadow:SetHide( bAvailable );
-
-		controlTable.FounderBox:LocalizeAndSetToolTip(founderTooltip);
-
-		IconHookup( building.PortraitIndex, 80, building.IconAtlas, controlTable.CorporationPortrait )
+		-- Corporation Icon Hookup
+		IconHookup( building.PortraitIndex, 80, building.IconAtlas, controlTable.CorporationPortrait );
 		controlTable.CorporationName:LocalizeAndSetText(building.Description);
 
-		-- Get the resource monopoly list for this Corporation
-		local resourceString = "";
-		for row in GameInfo.Building_ResourceMonopolyOrs( "BuildingType = '" .. building.Type .. "'" ) do
-			local requiredResource = GameInfo.Resources[row.ResourceType];
-			if requiredResource then
-				resourceString = resourceString .. requiredResource.IconString .. " ";
-			end		
+		-- Construct tooltip
+		local strTooltip = "";
+		strTooltip = strTooltip .. Locale.ConvertTextKey( "TXT_KEY_CPO_OFFICE_BENEFIT") .. "[NEWLINE]";
+		strTooltip = strTooltip .. Locale.ConvertTextKey( "-------------------") .. "[NEWLINE]";
+		strTooltip = strTooltip .. Locale.ConvertTextKey( office.Help ) .. "[NEWLINE][NEWLINE]" ;
+		strTooltip = strTooltip .. Locale.ConvertTextKey( "TXT_KEY_CPO_FRANCHISE_BENEFIT" ) .. "[NEWLINE]";
+		strTooltip = strTooltip .. Locale.ConvertTextKey( "-------------------" .. "[NEWLINE]");
+		strTooltip = strTooltip .. Locale.ConvertTextKey( franchise.Help);
+
+		controlTable.NameBox:SetToolTipString( strTooltip );
+
+		if( bAvailable ) then
+			-- Get the resource monopoly list for this Corporation
+			local resourceString = "";
+			for row in GameInfo.Building_ResourceMonopolyOrs( "BuildingType = '" .. building.Type .. "'" ) do
+				local requiredResource = GameInfo.Resources[row.ResourceType];
+				if requiredResource then
+					resourceString = resourceString .. requiredResource.IconString .. " ";
+				end		
+			end
+			controlTable.ResourcesRequired:SetText(resourceString);
+
+			-- Progress Bar Hookup
+			IconHookup( building.PortraitIndex, 64, building.IconAtlas, controlTable.ProgressImage );
+		  
+			if (building.Help ~= nil) then
+				controlTable.ProgressBox:LocalizeAndSetToolTip( GetHelpTextForBuilding(building.ID, false, false, false, nil) );
+			end
+
+			-- Reset controls if we are not building it
+			controlTable.ProgressTurns:SetText( "" );
+			controlTable.ProgressMeter:SetPercent( 0 );
+
+			-- iterate through all of our cities and see if we're building it
+			for city in g_pPlayer:Cities() do
+				if city:GetProductionBuilding() == building.ID then
+					--------------------------------------------------------
+					-- Building Production Progress
+					local iProductionNeeded = pPlayer:GetBuildingProductionNeeded(building.ID);
+					local iProductionGained = city:GetProductionTimes100() / 100;
+					controlTable.ProgressMeter:SetPercent( iProductionGained / iProductionNeeded );
+					
+					local bGeneratingProduction = city:GetCurrentProductionDifferenceTimes100(false, false) > 0;
+				
+					if (bGeneratingProduction) then
+						controlTable.ProgressTurns:SetText( Locale.ConvertTextKey("TXT_KEY_PRODUCTION_HELP_NUM_TURNS", city:GetBuildingProductionTurnsLeft(building.ID)) );
+					else
+						controlTable.ProgressTurns:SetText( Locale.ConvertTextKey("TXT_KEY_PRODUCTION_HELP_INFINITE_TURNS") );
+					end
+				end
+			end
+		else
+			controlTable.FounderCity:SetText( pFoundingCity:GetName() );
+			controlTable.OfficesLabel:SetText( pFoundingPlayer:GetNumberofOffices() );
+			controlTable.FranchisesLabel:SetText( pFoundingPlayer:GetNumberofGlobalFranchises() );
 		end
-		controlTable.ResourcesRequired:SetText(resourceString);
 	end
 
 	RecalcPanelSize();
@@ -285,7 +377,6 @@ function ShowHideHandler( bIsHide, bInitState )
         if( not bIsHide ) then
         	UI.incTurnTimerSemaphore();
         	Events.SerialEventGameMessagePopupShown(m_PopupInfo);
-
 			TabSelect(g_CurrentTab);
         else
             UI.decTurnTimerSemaphore();
@@ -301,4 +392,5 @@ OnEstablishedCorporationsButton();
 -- Just in case :)
 LuaEvents.RequestRefreshAdditionalInformationDropdownEntries();
 TabSelect("Corporations");
+SetBackground();
 ContextPtr:SetHide(true);
