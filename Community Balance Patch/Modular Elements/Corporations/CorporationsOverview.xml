@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Context ColorSet="Beige_Black_Alpha" Font="TwCenMT16" FontStyle="Shadow">
 	<Instance Name="AvailableCorporationInstance">
-		<Box ID="AvailableCorporationBox" Offset="0,0" Anchor="L,T" Size="955,80" Color="255,255,255,0">
+		<Box ID="AvailableCorporationBox" Offset="0,0" Anchor="L,T" Size="955,172" Color="255,255,255,0">
 			<Stack ID="RowStack" Anchor="L,T" StackGrowth="Right" Padding="13">
-				<Box ID="NameBox" Offset="0,0" Anchor="R,C" Size="320,48" Color="White.0">
-					<Image Anchor="L,C" Offset="0,0" Texture="CorpAtlas80.dds" Size="80.80" ID="CorporationPortrait"/>
-					<Label Anchor="L,C" Offset="80,0" String="CorpName" Font="TwCenMT22" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationName"/>
+				<Box ID="NameBox" Offset="0,0" Anchor="R,C" Size="340,172" Color="White.0">
+					<Image Anchor="L,T" Offset="0,0" Texture="CorpAtlas128.dds" Size="128.128" ID="CorporationPortrait"/>
+					<Label Anchor="L,T" Offset="128,30" String="CorpName" Font="TwCenMT22" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationName"/>
+					<Label Anchor="L,T" Offset="128,60" String="{TXT_KEY_CPO_MONOPOLY_REQUIRED}" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow"/>
+					<Label Anchor="L,T" Offset="128,84" String="[ICON_RES_WINE]" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="ResourcesRequired"/>
 				</Box>
-				<Box ID="ResourceBox" Offset="0,0" Anchor="R,C" Size="220,48" Color="White.0">
-					<Label Anchor="C,T" Offset="0,4" String="{TXT_KEY_CPO_MONOPOLY_REQUIRED}" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow"/>
-					<Label Anchor="C,B" Offset="0,4" String="[ICON_RES_WINE]" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="ResourcesRequired"/>
+				<Box ID="DetailsBox" Offset="0,0" Anchor="R,C" Size="615,160" Color="White.0">
+					<Label Anchor="L,T" Offset="0,14" WrapWidth="540" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationResourceBonus"/>
+					<Label Anchor="L,T" Offset="0,60" WrapWidth="540" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationOfficeBonus"/>
+					<Label Anchor="L,T" Offset="0,106" WrapWidth="540" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationTradeRouteBonus"/>
 				</Box>
+				<!--
 				<Box ID="ProgressBox" Anchor="R,C" Color="255.255.255.0" Size="254,70">
 					<Label Anchor="C,T" Offset="0,0" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="ProgressTurns"/>
 					<Image Anchor="C,C" Size="214,29" Offset="-20,4" Texture="MeterBarGreatPersonBack.dds">
@@ -21,7 +25,9 @@
 						<Button NoStateChange="1" Anchor="C,C" TextureOffset="64,128" Texture="CorpAtlas64.dds" Size="64,64" ID="ProgressImage"/>
 					</Image>
 				</Box>
+				-->
 			</Stack>
+			<Image Anchor="C,B" Offset="0,1" Texture="bar400x2.dds" Size="500,1"/>
 		</Box>
 	</Instance>
 	<Instance Name="EstablishedCorporationInstance">
@@ -178,16 +184,19 @@
 				</Box>
 				<Box Color="0,0,0,0" ID="YourCorporationBox" Hidden="1">
 					<Stack Anchor="L,T" StackGrowth="Right">
-						<Box ID="YourCorporationNameBox" Offset="0,0" Anchor="L,T" Size="320,128" Color="White.0">
+						<Box ID="YourCorporationNameBox" Offset="0,0" Anchor="L,T" Size="350,128" Color="White.0">
 							<Image Anchor="L,C" Offset="0,0" Texture="CorpAtlas128.dds" Size="128.128" ID="YourCorporationPortrait"/>
 							<Label Anchor="L,T" Offset="128,40" String="CorpName" Font="TwCenMT22" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationName"/>
 							<Label Anchor="L,T" Offset="128,64" String="CorpName" Font="TwCenMT18" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationHQ"/>
 							<Label Anchor="L,T" Offset="128,84" String="CorpName" Font="TwCenMT18" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationDate"/>
 						</Box>
 						<Box ID="YourCorporationInfoBox" Offset="0,0" Anchor="L,T" Size="600,128" Color="White.0">
-							<Label Anchor="L,T" Offset="20,10" WrapWidth="600" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationHelperInfo"/>
+							<Label Anchor="L,T" Offset="20,10" WrapWidth="600" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationInfoBonusRes"/>
+							<Label Anchor="L,T" Offset="20,36" WrapWidth="600" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationInfoBonusOffice"/>
+							<Label Anchor="L,T" Offset="20,60" WrapWidth="600" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationInfoBonusTR"/>
 						</Box>
 					</Stack>
+					<Image Anchor="L,T" Offset="-350,-5" AnchorSide="o,i" Texture="VerticalTrim.dds" Size="5,128"/>
 					<Image Anchor="L,T" Offset="0,128" Texture="HorizontalTrim.dds" Size="956,5"/>
 					<Stack Anchor="L,T" Offset="76,132" StackGrowth="Right">
 						<!-- Our Offices -->

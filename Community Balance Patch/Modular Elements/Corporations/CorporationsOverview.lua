@@ -70,47 +70,68 @@ g_YourFranchisesSortOptions = {
 	},
 }
 
--- NOTE: IF YOU ADD A CORPORATION, INCREMENT THIS NUMBER!
-local g_NumCorporations = 7;
-
 -- Corporation HQs
-g_Headquarters = {
-	[0] = {
-		headquartersClass = "BUILDINGCLASS_TRADER_SIDS_HQ",
-		officeClass = "BUILDINGCLASS_TRADER_SIDS",
-		franchiseClass = "BUILDINGCLASS_TRADER_SIDS_FRANCHISE"
-	},
-	[1] = {
-		headquartersClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS_HQ",
-		officeClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS",
-		franchiseClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS_FRANCHISE"
-	},
-	[2] = {
-		headquartersClass = "BUILDINGCLASS_HEXXON_REFINERY_HQ",
-		officeClass = "BUILDINGCLASS_HEXXON_REFINERY",
-		franchiseClass = "BUILDINGCLASS_HEXXON_REFINERY_FRANCHISE"
-	},
-	[3] = {
-		headquartersClass = "BUILDINGCLASS_GIORIO_ARMEIER_HQ",
-		officeClass = "BUILDINGCLASS_GIORIO_ARMEIER",
-		franchiseClass = "BUILDINGCLASS_GIORIO_ARMEIER_FRANCHISE"
-	},
-	[4] = {
-		headquartersClass = "BUILDINGCLASS_FIRAXITE_MATERIALS_HQ",
-		officeClass = "BUILDINGCLASS_FIRAXITE_MATERIALS",
-		franchiseClass = "BUILDINGCLASS_FIRAXITE_MATERIALS_FRANCHISE"
-	},
-	[5] = {
-		headquartersClass = "BUILDINGCLASS_TWOKAY_FOODS_HQ",
-		officeClass = "BUILDINGCLASS_TWOKAY_FOODS",
-		franchiseClass = "BUILDINGCLASS_TWOKAY_FOODS_FRANCHISE"
-	},
-	[6] = {
-		headquartersClass = "BUILDINGCLASS_CIVILIZED_JEWELERS_HQ",
-		officeClass = "BUILDINGCLASS_CIVILIZED_JEWELERS",
-		franchiseClass = "BUILDINGCLASS_CIVILIZED_JEWELERS_FRANCHISE"
-	}
-}
+-- g_Corporations = {
+-- 	[0] = {
+-- 		headquartersClass = "BUILDINGCLASS_TRADER_SIDS_HQ",
+-- 		officeClass = "BUILDINGCLASS_TRADER_SIDS",
+-- 		franchiseClass = "BUILDINGCLASS_TRADER_SIDS_FRANCHISE"
+-- 	},
+-- 	[1] = {
+-- 		headquartersClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS_HQ",
+-- 		officeClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS",
+-- 		franchiseClass = "BUILDINGCLASS_LANDSEA_EXTRACTORS_FRANCHISE"
+-- 	},
+-- 	[2] = {
+-- 		headquartersClass = "BUILDINGCLASS_HEXXON_REFINERY_HQ",
+-- 		officeClass = "BUILDINGCLASS_HEXXON_REFINERY",
+-- 		franchiseClass = "BUILDINGCLASS_HEXXON_REFINERY_FRANCHISE"
+-- 	},
+-- 	[3] = {
+-- 		headquartersClass = "BUILDINGCLASS_GIORIO_ARMEIER_HQ",
+-- 		officeClass = "BUILDINGCLASS_GIORIO_ARMEIER",
+-- 		franchiseClass = "BUILDINGCLASS_GIORIO_ARMEIER_FRANCHISE"
+-- 	},
+-- 	[4] = {
+-- 		headquartersClass = "BUILDINGCLASS_FIRAXITE_MATERIALS_HQ",
+-- 		officeClass = "BUILDINGCLASS_FIRAXITE_MATERIALS",
+-- 		franchiseClass = "BUILDINGCLASS_FIRAXITE_MATERIALS_FRANCHISE"
+-- 	},
+-- 	[5] = {
+-- 		headquartersClass = "BUILDINGCLASS_TWOKAY_FOODS_HQ",
+-- 		officeClass = "BUILDINGCLASS_TWOKAY_FOODS",
+-- 		franchiseClass = "BUILDINGCLASS_TWOKAY_FOODS_FRANCHISE"
+-- 	},
+-- 	[6] = {
+-- 		headquartersClass = "BUILDINGCLASS_CIVILIZED_JEWELERS_HQ",
+-- 		officeClass = "BUILDINGCLASS_CIVILIZED_JEWELERS",
+-- 		franchiseClass = "BUILDINGCLASS_CIVILIZED_JEWELERS_FRANCHISE"
+-- 	}
+-- }
+
+local g_Corporations = {};
+local g_NumCorporations = 0;
+-- Generate list of Corporations
+for hq in GameInfo.Buildings() do
+	-- Found an HQ
+	if(hq.CorporationHQID > 0) then
+		g_NumCorporations = g_NumCorporations + 1;
+		
+		-- Headquarters provides the Office
+		local OfficeClass = GameInfo.BuildingClasses[hq.FreeBuildingThisCity];
+		local Office = GameInfo.Buildings[OfficeClass.DefaultBuilding];
+		-- Office provides the Franchise
+		local FranchiseClass = GameInfo.BuildingClasses[Office.FreeBuildingTradeTargetCity];
+
+		local instance = {
+			headquartersClass = GameInfo.BuildingClasses[hq.BuildingClass],
+			officeClass = OfficeClass,
+			franchiseClass = FranchiseClass,
+		};
+
+		table.insert(g_Corporations, instance);
+	end
+end
 
 -------------------------------------------------
 -- Global Variables
@@ -152,6 +173,10 @@ function DisplayCorporations()
 	end
 end
 
+function DisplayWorldFranchises()
+	print("DisplayWorldFranchises()");
+end
+
 function DisplayMonopolies()
 	print("DisplayMonopolies()");
 end
@@ -176,16 +201,15 @@ function UpdateAvailableCorporations()
 	g_EstablishedCorporationsIM:ResetInstances();
 
 	local corporationsLeft = g_NumCorporations;
+	for i,v in pairs(g_Corporations) do
 
-	for i,v in pairs(g_Headquarters) do
-
-		BuildingClass = GameInfo.BuildingClasses[v.headquartersClass];
+		BuildingClass = v.headquartersClass;
 		building = GameInfo.Buildings[BuildingClass.DefaultBuilding];
 
-		OfficeClass = GameInfo.BuildingClasses[v.officeClass];
+		OfficeClass = v.officeClass;
 		office = GameInfo.Buildings[OfficeClass.DefaultBuilding];
 
-		FranchiseClass = GameInfo.BuildingClasses[v.franchiseClass];
+		FranchiseClass = v.franchiseClass;
 		franchise = GameInfo.Buildings[FranchiseClass.DefaultBuilding];
 
 		corpID = building.CorporationHQID;
@@ -252,19 +276,19 @@ function UpdateAvailableCorporations()
 		end
 
 		-- Corporation Icon Hookup
-		IconHookup( building.PortraitIndex, 80, building.IconAtlas, controlTable.CorporationPortrait );
+		IconHookup( building.PortraitIndex, 128, building.IconAtlas, controlTable.CorporationPortrait );
 		controlTable.CorporationName:LocalizeAndSetText(building.Description);
 
 		-- Construct tooltip
-		local strTooltip = "";
-		strTooltip = strTooltip .. Locale.ConvertTextKey( "TXT_KEY_CPO_OFFICE_BENEFIT") .. "[NEWLINE]";
-		strTooltip = strTooltip .. Locale.ConvertTextKey( "-------------------") .. "[NEWLINE]";
-		strTooltip = strTooltip .. Locale.ConvertTextKey( office.Help ) .. "[NEWLINE][NEWLINE]" ;
-		strTooltip = strTooltip .. Locale.ConvertTextKey( "TXT_KEY_CPO_FRANCHISE_BENEFIT" ) .. "[NEWLINE]";
-		strTooltip = strTooltip .. Locale.ConvertTextKey( "-------------------" .. "[NEWLINE]");
-		strTooltip = strTooltip .. Locale.ConvertTextKey( franchise.Help);
-
-		controlTable.NameBox:SetToolTipString( strTooltip );
+		-- local strTooltip = "";
+		-- strTooltip = strTooltip .. Locale.ConvertTextKey( "TXT_KEY_CPO_OFFICE_BENEFIT") .. "[NEWLINE]";
+		-- strTooltip = strTooltip .. Locale.ConvertTextKey( "-------------------") .. "[NEWLINE]";
+		-- strTooltip = strTooltip .. Locale.ConvertTextKey( office.Help ) .. "[NEWLINE][NEWLINE]" ;
+		-- strTooltip = strTooltip .. Locale.ConvertTextKey( "TXT_KEY_CPO_FRANCHISE_BENEFIT" ) .. "[NEWLINE]";
+		-- strTooltip = strTooltip .. Locale.ConvertTextKey( "-------------------" .. "[NEWLINE]");
+		-- strTooltip = strTooltip .. Locale.ConvertTextKey( franchise.Help);
+		-- 
+		-- controlTable.NameBox:SetToolTipString( strTooltip );
 
 		if( bAvailable ) then
 			-- Get the resource monopoly list for this Corporation
@@ -277,35 +301,39 @@ function UpdateAvailableCorporations()
 			end
 			controlTable.ResourcesRequired:SetText(resourceString);
 
+			controlTable.CorporationResourceBonus:LocalizeAndSetText( building.CorporationResourceBonusHelp );
+			controlTable.CorporationOfficeBonus:LocalizeAndSetText( building.CorporationOfficeBonusHelp );
+			controlTable.CorporationTradeRouteBonus:LocalizeAndSetText( building.CorporationTradeRouteBonusHelp );
+
 			-- Progress Bar Hookup
-			IconHookup( building.PortraitIndex, 64, building.IconAtlas, controlTable.ProgressImage );
+			--IconHookup( building.PortraitIndex, 64, building.IconAtlas, controlTable.ProgressImage );
 		  
-			if (building.Help ~= nil) then
-				controlTable.ProgressBox:LocalizeAndSetToolTip( GetHelpTextForBuilding(building.ID, false, false, false, nil) );
-			end
+			--if (building.Help ~= nil) then
+			--	controlTable.ProgressBox:LocalizeAndSetToolTip( GetHelpTextForBuilding(building.ID, false, false, false, nil) );
+			--end
 
 			-- Reset controls if we are not building it
-			controlTable.ProgressTurns:SetText( "" );
-			controlTable.ProgressMeter:SetPercent( 0 );
-
-			-- iterate through all of our cities and see if we're building it
-			for city in g_pPlayer:Cities() do
-				if city:GetProductionBuilding() == building.ID then
-					--------------------------------------------------------
-					-- Building Production Progress
-					local iProductionNeeded = pPlayer:GetBuildingProductionNeeded(building.ID);
-					local iProductionGained = city:GetProductionTimes100() / 100;
-					controlTable.ProgressMeter:SetPercent( iProductionGained / iProductionNeeded );
-					
-					local bGeneratingProduction = city:GetCurrentProductionDifferenceTimes100(false, false) > 0;
-				
-					if (bGeneratingProduction) then
-						controlTable.ProgressTurns:SetText( Locale.ConvertTextKey("TXT_KEY_PRODUCTION_HELP_NUM_TURNS", city:GetBuildingProductionTurnsLeft(building.ID)) );
-					else
-						controlTable.ProgressTurns:SetText( Locale.ConvertTextKey("TXT_KEY_PRODUCTION_HELP_INFINITE_TURNS") );
-					end
-				end
-			end
+			-- controlTable.ProgressTurns:SetText( "" );
+			-- controlTable.ProgressMeter:SetPercent( 0 );
+			-- 
+			-- -- iterate through all of our cities and see if we're building it
+			-- for city in g_pPlayer:Cities() do
+			-- 	if city:GetProductionBuilding() == building.ID then
+			-- 		--------------------------------------------------------
+			-- 		-- Building Production Progress
+			-- 		local iProductionNeeded = pPlayer:GetBuildingProductionNeeded(building.ID);
+			-- 		local iProductionGained = city:GetProductionTimes100() / 100;
+			-- 		controlTable.ProgressMeter:SetPercent( iProductionGained / iProductionNeeded );
+			-- 		
+			-- 		local bGeneratingProduction = city:GetCurrentProductionDifferenceTimes100(false, false) > 0;
+			-- 	
+			-- 		if (bGeneratingProduction) then
+			-- 			controlTable.ProgressTurns:SetText( Locale.ConvertTextKey("TXT_KEY_PRODUCTION_HELP_NUM_TURNS", city:GetBuildingProductionTurnsLeft(building.ID)) );
+			-- 		else
+			-- 			controlTable.ProgressTurns:SetText( Locale.ConvertTextKey("TXT_KEY_PRODUCTION_HELP_INFINITE_TURNS") );
+			-- 		end
+			-- 	end
+			-- end
 		else
 			controlTable.FounderCity:SetText( pFoundingCity:GetName() );
 			controlTable.OfficesLabel:SetText( pFoundingPlayer:GetNumberofOffices() );
@@ -334,21 +362,17 @@ function UpdateOurCorporation()
 
 	local corpHQ = nil;
 
-	for i,v in pairs(g_Headquarters) do
-		BuildingClass = GameInfo.BuildingClasses[v.headquartersClass];
+	g_Office = GameInfo.Buildings[g_pPlayer:GetOfficeBuilding()];
+	g_Franchise = GameInfo.Buildings[g_pPlayer:GetFranchiseBuilding()];
+
+	for i,v in pairs(g_Corporations) do
+		BuildingClass = v.headquartersClass;
 		building = GameInfo.Buildings[BuildingClass.DefaultBuilding];
 
 		corpID = building.CorporationHQID;
 
 		if(corpID == ourCorporationID) then
 			corpHQ = building;
-			
-			OfficeClass = GameInfo.BuildingClasses[v.officeClass];
-			g_Office = GameInfo.Buildings[OfficeClass.DefaultBuilding];
-
-			FranchiseClass = GameInfo.BuildingClasses[v.franchiseClass];
-			g_Franchise = GameInfo.Buildings[FranchiseClass.DefaultBuilding];
-
 			break;
 		end
 	end
@@ -356,29 +380,28 @@ function UpdateOurCorporation()
 	IconHookup( corpHQ.PortraitIndex, 128, corpHQ.IconAtlas, Controls.YourCorporationPortrait );
 
 	Controls.YourCorporationName:LocalizeAndSetText( corpHQ.Description );
-	Controls.YourCorporationHelperInfo:LocalizeAndSetText( corpHQ.CorporationHelper );
+
+	Controls.YourCorporationInfoBonusRes:LocalizeAndSetText( corpHQ.CorporationResourceBonusHelp );
+	Controls.YourCorporationInfoBonusOffice:LocalizeAndSetText( corpHQ.CorporationOfficeBonusHelp );
+	Controls.YourCorporationInfoBonusTR:LocalizeAndSetText( corpHQ.CorporationTradeRouteBonusHelp );
 
 	-- TEST CODE: Replace with a stored string
 	-- Update date
 	local date;
-	local traditionalDate = Game.GetTurnString();
-		
-	if (g_pPlayer:IsUsingMayaCalendar()) then
-		date = g_pPlayer:GetMayaCalendarString();
-		local toolTipString = Locale.ConvertTextKey("TXT_KEY_MAYA_DATE_TOOLTIP", g_pPlayer:GetMayaCalendarLongString(), traditionalDate);
-		Controls.YourCorporationDate:SetToolTipString(toolTipString);
-	else
-		date = traditionalDate;
-	end
+	local foundedTurn = g_pPlayer:GetCorporationFoundedTurn();
+	
+	-- note: cannnot a fixed date	
+	--if (g_pPlayer:IsUsingMayaCalendar()) then
+	--	date = g_pPlayer:GetMayaCalendarString();
+	--	local toolTipString = Locale.ConvertTextKey("TXT_KEY_MAYA_DATE_TOOLTIP", g_pPlayer:GetMayaCalendarLongString(), traditionalDate);
+	--	Controls.YourCorporationDate:SetToolTipString(toolTipString);
+	--else
+	--	date = traditionalDate;
+	--end
 
-	-- Find our HQ (this is stupid)
-	for city in g_pPlayer:Cities() do
-		if(city:IsHasBuilding( corpHQ.ID )) then
-			Controls.YourCorporationHQ:LocalizeAndSetText( "TXT_KEY_CPO_YOUR_CORPORATION_HQ", city:GetName() );
-		end
-	end
-
-	Controls.YourCorporationDate:LocalizeAndSetText("TXT_KEY_CPO_YOUR_CORPORATION_ESTABLISHED", date);
+	local HQCity = g_pPlayer:GetCorporationHeadquarters();
+	Controls.YourCorporationHQ:LocalizeAndSetText( "TXT_KEY_CPO_YOUR_CORPORATION_HQ", HQCity:GetName() );
+	Controls.YourCorporationDate:LocalizeAndSetText("TXT_KEY_CPO_YOUR_CORPORATION_ESTABLISHED", Game.GetDateString(foundedTurn), foundedTurn);
 
 	Controls.OOSortByTR:LocalizeAndSetToolTip( "TXT_KEY_CPO_OFFICE_TRADE_ROUTES_SORT_TT", corpHQ.Description );
 
@@ -550,6 +573,10 @@ end
 -------------------------------------------------------------------------------
 g_Tabs["Corporations"].RefreshContent = function()
 	DisplayCorporations();
+end
+
+g_Tabs["WorldFranchises"].RefreshContent = function()
+	DisplayWorldFranchises();
 end
 
 g_Tabs["Monopolies"].RefreshContent = function()

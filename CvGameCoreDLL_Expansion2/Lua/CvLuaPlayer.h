@@ -1238,6 +1238,10 @@ protected:
 	static int lGetCorporationHelper(lua_State* L);
 	static int lGetMaxFranchises(lua_State* L);
 	static int lGetCorpID(lua_State* L);
+	static int lGetCorporationHeadquarters(lua_State* L);
+	static int lGetOfficeBuilding(lua_State* L);
+	static int lGetFranchiseBuilding(lua_State* L);
+	static int lGetCorporationFoundedTurn(lua_State* L);
 #endif
 	static int lGetInternationalTradeRouteDomainModifier(lua_State* L);
 	static int lGetInternationalTradeRouteTotal(lua_State* L);

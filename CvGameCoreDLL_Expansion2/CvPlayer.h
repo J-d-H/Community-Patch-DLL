@@ -1373,6 +1373,9 @@ public:
 	void SetCorporateFounderID(int iValue);
 	int GetCorporateFounderID() const;
 
+	void SetCorporateFoundedTurn(int iValue);
+	int GetCorporateFoundedTurn() const;
+
 	void ChangeCorporationMaxFranchises(int iValue);
 	int GetCorporationMaxFranchises() const;
 
@@ -2884,6 +2887,7 @@ protected:
 	FAutoVariable<int, CvPlayer> m_iSpawnCooldown;
 	FAutoVariable<int, CvPlayer> m_iAbleToMarryCityStatesCount;
 	FAutoVariable<int, CvPlayer> m_iCorporateFounderID;
+	FAutoVariable<int, CvPlayer> m_iCorporateFoundedTurn;
 	FAutoVariable<int, CvPlayer> m_iCorporationMaxFranchises;
 	FAutoVariable<int, CvPlayer> m_iCorporateFranchises;
 	FAutoVariable<bool, CvPlayer> m_bTradeRoutesInvulnerable;

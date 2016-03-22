@@ -63,7 +63,7 @@
 			<Text>Headquarters: {1_CityName}</Text>
 		</Row>
 		<Row Tag="TXT_KEY_CPO_YOUR_CORPORATION_ESTABLISHED">
-			<Text>Founded: {1_Date}</Text>
+			<Text>Founded: {1_Date} (Turn {2_Turn})</Text>
 		</Row>
 		<Row Tag="TXT_KEY_CPO_YOUR_OFFICES">
 			<Text>Your Offices</Text>

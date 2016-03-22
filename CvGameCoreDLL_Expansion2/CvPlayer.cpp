@@ -571,6 +571,7 @@ CvPlayer::CvPlayer() :
 	, m_iSpawnCooldown("CvPlayer::m_iSpawnCooldown", m_syncArchive)
 	, m_iAbleToMarryCityStatesCount("CvPlayer::m_iAbleToMarryCityStatesCount", m_syncArchive)
 	, m_iCorporateFounderID("CvPlayer::m_iCorporateFounderID", m_syncArchive)
+	, m_iCorporateFoundedTurn("CvPlayer::m_iCorporateFoundedTurn", m_syncArchive)
 	, m_iCorporationMaxFranchises("CvPlayer::m_iCorporationMaxFranchises", m_syncArchive)
 	, m_iCorporateFranchises("CvPlayer::m_iCorporateFranchises", m_syncArchive)
 	, m_bTradeRoutesInvulnerable("CvPlayer::m_bTradeRoutesInvulnerable", m_syncArchive)
@@ -1476,6 +1477,7 @@ void CvPlayer::uninit()
 	m_iSpawnCooldown = 0;
 	m_iAbleToMarryCityStatesCount = 0;
 	m_iCorporateFounderID = 0;
+	m_iCorporateFoundedTurn = 0;
 	m_iCorporationMaxFranchises = 0;
 	m_iCorporateFranchises = 0;
 	m_bTradeRoutesInvulnerable = false;
@@ -11272,6 +11274,7 @@ void CvPlayer::processBuilding(BuildingTypes eBuilding, int iChange, bool bFirst
 	if(pBuildingInfo->GetCorporationHQID() > 0 && GetCorporateFounderID() <= 0)
 	{
 		SetCorporateFounderID(pBuildingInfo->GetCorporationHQID());
+		SetCorporateFoundedTurn(GC.getGame().getGameTurn());
 		if(GetID() == GC.getGame().getActivePlayer())
 		{
 			Localization::String strMessage;
@@ -22575,6 +22578,16 @@ int CvPlayer::GetCorporateFounderID() const
 void CvPlayer::SetCorporateFounderID(int iChange)
 {
 	m_iCorporateFounderID = iChange;
+}
+//	--------------------------------------------------------------------------------
+int CvPlayer::GetCorporateFoundedTurn() const
+{
+	return m_iCorporateFoundedTurn;
+}
+//	--------------------------------------------------------------------------------
+void CvPlayer::SetCorporateFoundedTurn(int iValue)
+{
+	m_iCorporateFoundedTurn = iValue;
 }
 void CvPlayer::DoFreedomCorp()
 {
