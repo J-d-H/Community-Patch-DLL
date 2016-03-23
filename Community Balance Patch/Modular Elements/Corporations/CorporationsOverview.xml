@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Context ColorSet="Beige_Black_Alpha" Font="TwCenMT16" FontStyle="Shadow">
+	<Instance Name="MonopolyResourceInstance">
+		<Box ID="MonopolyResourceBox" Offset="0,0" Anchor="L,T" Size="16,16" Color="White.0">
+			<Label Anchor="L,T" Offset="0,0" String="[ICON_RES_WINE]" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="ResourcesLabel" />
+		</Box>
+	</Instance>
 	<Instance Name="AvailableCorporationInstance">
-		<Box ID="AvailableCorporationBox" Offset="0,0" Anchor="L,T" Size="955,172" Color="255,255,255,0">
+		<Box ID="AvailableCorporationBox" Offset="0,0" Anchor="L,T" Size="955,140" Color="255,255,255,0">
 			<Stack ID="RowStack" Anchor="L,T" StackGrowth="Right" Padding="13">
-				<Box ID="NameBox" Offset="0,0" Anchor="R,C" Size="340,172" Color="White.0">
+				<Box ID="NameBox" Offset="0,0" Anchor="R,C" Size="340,140" Color="White.0">
 					<Image Anchor="L,T" Offset="0,0" Texture="CorpAtlas128.dds" Size="128.128" ID="CorporationPortrait"/>
 					<Label Anchor="L,T" Offset="128,30" String="CorpName" Font="TwCenMT22" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationName"/>
 					<Label Anchor="L,T" Offset="128,60" String="{TXT_KEY_CPO_MONOPOLY_REQUIRED}" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow"/>
-					<Label Anchor="L,T" Offset="128,84" String="[ICON_RES_WINE]" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="ResourcesRequired"/>
+					<Stack ID="MonopolyResourceStack" Anchor="L,T" StackGrowth="Right" Offset="128,84" Padding="6">
+					</Stack>						   
 				</Box>
-				<Box ID="DetailsBox" Offset="0,0" Anchor="R,C" Size="615,160" Color="White.0">
-					<Label Anchor="L,T" Offset="0,14" WrapWidth="540" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationResourceBonus"/>
-					<Label Anchor="L,T" Offset="0,60" WrapWidth="540" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationOfficeBonus"/>
-					<Label Anchor="L,T" Offset="0,106" WrapWidth="540" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationTradeRouteBonus"/>
+				<Box ID="DetailsBox" Offset="0,0" Anchor="R,C" Size="620,140" Color="White.0">"
+					<Label Anchor="L,C" Offset="0,0" WrapWidth="550" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="CorporationBonus"/>
 				</Box>
 				<!--
 				<Box ID="ProgressBox" Anchor="R,C" Color="255.255.255.0" Size="254,70">
@@ -27,7 +31,7 @@
 				</Box>
 				-->
 			</Stack>
-			<Image Anchor="C,B" Offset="0,1" Texture="bar400x2.dds" Size="500,1"/>
+			<Image Anchor="C,B" Offset="0,1" Texture="bar900x2.dds" Size="900,1"/>
 		</Box>
 	</Instance>
 	<Instance Name="EstablishedCorporationInstance">
@@ -70,7 +74,8 @@
 					<Label ID="CivilizationName" Anchor="L,C" Offset="32,0" TruncateWidth="129" ColorSet="Beige_Black_Alpha" Font="TwCenMT18" FontStyle="Shadow"/>
 				</Box>
 				<Box Size="161,25" Color="0,0,0,0">
-					<Label ID="CityName" Anchor="L,C" Offset="42,0" TruncateWidth="115" ColorSet="Beige_Black_Alpha" Font="TwCenMT18" FontStyle="Shadow"/>
+					<Label ID="CapitalIcon" String="[ICON_CAPITAL]" Anchor="L,C" Offset="0,0" ColorSet="Beige_Black_Alpha" Font="TwCenMT18" FontStyle="Shadow"/>
+					<Label ID="CityName" Anchor="L,C" Offset="28,0" TruncateWidth="115" ColorSet="Beige_Black_Alpha" Font="TwCenMT18" FontStyle="Shadow"/>
 				</Box>
 				<Box Size="80,25" Color="0,0,0,0">
 					<Label ID="CityTradeRoutes" Anchor="C,C" TruncateWidth="155" ColorSet="Beige_Black_Alpha" Font="TwCenMT18" FontStyle="Shadow"/>
@@ -184,23 +189,23 @@
 				</Box>
 				<Box Color="0,0,0,0" ID="YourCorporationBox" Hidden="1">
 					<Stack Anchor="L,T" StackGrowth="Right">
-						<Box ID="YourCorporationNameBox" Offset="0,0" Anchor="L,T" Size="350,128" Color="White.0">
-							<Image Anchor="L,C" Offset="0,0" Texture="CorpAtlas128.dds" Size="128.128" ID="YourCorporationPortrait"/>
-							<Label Anchor="L,T" Offset="128,40" String="CorpName" Font="TwCenMT22" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationName"/>
-							<Label Anchor="L,T" Offset="128,64" String="CorpName" Font="TwCenMT18" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationHQ"/>
-							<Label Anchor="L,T" Offset="128,84" String="CorpName" Font="TwCenMT18" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationDate"/>
+						<Box ID="YourCorporationNameBox" Offset="0,0" Anchor="L,T" Size="350,148" Color="White.0">
+							<Image Anchor="L,T" Offset="0,0" Texture="CorpAtlas128.dds" Size="128.128" ID="YourCorporationPortrait"/>
+							<Label Anchor="L,T" Offset="124,20" String="CorpName" Font="TwCenMT22" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationName"/>
+							<Label Anchor="L,T" Offset="124,44" String="CorpName" Font="TwCenMT18" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationHQ"/>
+							<Label Anchor="L,T" Offset="124,64" String="CorpName" Font="TwCenMT18" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationDate"/>
+							<Label Anchor="L,T" Offset="124,90" String="CorpName" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationOffices"/>
+							<Label Anchor="L,T" Offset="124,112" String="CorpName" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationFranchises"/>
 						</Box>
-						<Box ID="YourCorporationInfoBox" Offset="0,0" Anchor="L,T" Size="600,128" Color="White.0">
-							<Label Anchor="L,T" Offset="20,10" WrapWidth="600" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationInfoBonusRes"/>
-							<Label Anchor="L,T" Offset="20,36" WrapWidth="600" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationInfoBonusOffice"/>
-							<Label Anchor="L,T" Offset="20,60" WrapWidth="600" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationInfoBonusTR"/>
+						<Box ID="YourCorporationInfoBox" Offset="0,0" Anchor="L,T" Size="600,148" Color="White.0">
+							<Label Anchor="L,C" Offset="10,0" WrapWidth="590" Font="TwCenMT16" ColorSet="Beige_Black_Alpha" FontStyle="Shadow" ID="YourCorporationInfoBonus"/>
 						</Box>
 					</Stack>
-					<Image Anchor="L,T" Offset="-350,-5" AnchorSide="o,i" Texture="VerticalTrim.dds" Size="5,128"/>
-					<Image Anchor="L,T" Offset="0,128" Texture="HorizontalTrim.dds" Size="956,5"/>
-					<Stack Anchor="L,T" Offset="76,132" StackGrowth="Right">
+					<Image Anchor="L,T" Offset="-350,0" AnchorSide="o,i" Texture="VerticalTrim.dds" Size="5,148"/>
+					<Image Anchor="L,T" Offset="0,148" Texture="HorizontalTrim.dds" Size="956,5"/>
+					<Stack Anchor="L,T" Offset="76,152" StackGrowth="Right">
 						<!-- Our Offices -->
-						<Box Anchor="L,T" Size="402,328" Offset="0,0" Color="0,0,0,0">
+						<Box Anchor="L,T" Size="402,308" Offset="0,0" Color="0,0,0,0">
 							<Stack Anchor="L,T" StackGrowth="Bottom">
 								<Box Size="402,22" Color="0,0,0,0">
 									<Label Anchor="C,B" String="TXT_KEY_CPO_YOUR_OFFICES" ColorSet="Beige_Black_Alpha" Font="TwCenMT22" FontStyle="Shadow"/>
@@ -227,9 +232,9 @@
 								<Box Size="402,5" Color="0,0,0,0">
 									<Image Anchor="C,B" Offset="0,1" Texture="bar400x2.dds" Size="400,1"/>
 								</Box>
-								<ScrollPanel Vertical="1" Size="380,276" Offset="0,0" AutoScrollBar="0" ID="YourOfficesScrollPanel">
+								<ScrollPanel Vertical="1" Size="380,256" Offset="0,0" AutoScrollBar="0" ID="YourOfficesScrollPanel">
 									<!-- Scroll Controls -->
-									<ScrollBar Style="VertSlider" Length="240" Anchor="R,C" AnchorSide="O,I"/>
+									<ScrollBar Style="VertSlider" Length="220" Anchor="R,C" AnchorSide="O,I"/>
 									<UpButton Style="ScrollBarUp" Anchor="R,T" AnchorSide="O,I"/>
 									<DownButton Style="ScrollBarDown" Anchor="R,B" AnchorSide="O,I"/>
 									<Stack StackGrowth="Bottom" ID="YourOfficesStack"/>
@@ -237,7 +242,7 @@
 							</Stack>
 						</Box>
 						<!-- Our Franchises -->
-						<Box Anchor="L,T" Size="402,328" Offset="0,0" Color="0,0,0,0">
+						<Box Anchor="L,T" Size="402,308" Offset="0,0" Color="0,0,0,0">
 							<Stack Anchor="L,T" StackGrowth="Bottom">
 								<Box Size="402,22" Color="0,0,0,0">
 									<Label Anchor="C,B" String="TXT_KEY_CPO_YOUR_FRANCHISES" ColorSet="Beige_Black_Alpha" Font="TwCenMT22" FontStyle="Shadow"/>
@@ -262,9 +267,9 @@
 								<Box Size="402,5" Color="0,0,0,0">
 									<Image Anchor="C,B" Offset="0,1" Texture="bar400x2.dds" Size="400,1"/>
 								</Box>
-								<ScrollPanel Vertical="1" Size="380,276" Offset="0,0" AutoScrollBar="0" ID="YourFranchisesScrollPanel">
+								<ScrollPanel Vertical="1" Size="380,256" Offset="0,0" AutoScrollBar="0" ID="YourFranchisesScrollPanel">
 									<!-- Scroll Controls -->
-									<ScrollBar Style="VertSlider" Length="240" Anchor="R,C" AnchorSide="O,I"/>
+									<ScrollBar Style="VertSlider" Length="220" Anchor="R,C" AnchorSide="O,I"/>
 									<UpButton Style="ScrollBarUp" Anchor="R,T" AnchorSide="O,I"/>
 									<DownButton Style="ScrollBarDown" Anchor="R,B" AnchorSide="O,I"/>
 									<Stack StackGrowth="Bottom" ID="YourFranchisesStack"/>

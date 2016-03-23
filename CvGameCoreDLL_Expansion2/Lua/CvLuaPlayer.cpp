@@ -4356,7 +4356,7 @@ int CvLuaPlayer::lGetOfficeBuilding(lua_State* L)
 			{
 				if(pkBuildingInfo->GetCorporationHQID() == 0 && pkBuildingInfo->GetCorporationID() == iCorporation)
 				{
-					iResult = (int) eBuilding;
+					iResult = pkBuildingInfo->GetBuildingClassType();
 					break;
 				}
 			}

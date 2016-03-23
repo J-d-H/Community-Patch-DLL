@@ -89,5 +89,14 @@
 		<Row Tag="TXT_KEY_CPO_FRANCHISED">
 			<Text>Franchised</Text>
 		</Row>
+		<Row Tag="TXT_KEY_CPO_NUM_OFFICES">
+			<Text>Offices Opened: {1_Num}</Text>
+		</Row>
+		<Row Tag="TXT_KEY_CPO_NUM_FRANCHISES">
+			<Text>Franchises Established: {1_Num} of {2_Max}</Text>
+		</Row>
+		<Row Tag="TXT_KEY_CORP_NUM_FRANCHISE_TT">
+			<Text>Total number of foreign Cities with Franchises (i.e. Cities your Corporation has spread to).[NEWLINE][NEWLINE]The maximum number of Franchises you can create is a factor of the number of [ICON_INTERNATIONAL_TRADE] Trade Routes you can establish and World Size. Ideology Tenets can also modify this number, and in some cases allow you to exceed your Franchise maximum.</Text>
+		</Row>
 	</Language_en_US>
 </GameData>
